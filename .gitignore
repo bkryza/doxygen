@@ -23,3 +23,6 @@ tags
 
 /examples/html/*
 /examples/latex/*
+
+cmake-build-debug
+_build*

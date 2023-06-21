@@ -718,6 +718,7 @@ void HtmlCodeGenerator::setRelativePath(const QCString &path)
 
 void HtmlCodeGenerator::codify(const QCString &str)
 {
+
   int tabSize = Config_getInt(TAB_SIZE);
   if (!str.isEmpty())
   {
@@ -1033,9 +1034,9 @@ void HtmlCodeGenerator::writeCodeAnchor(const QCString &anchor)
   *m_t << "<a id=\"" << anchor << "\" name=\"" << anchor << "\"></a>";
 }
 
-void HtmlCodeGenerator::startCodeFragment(const QCString &)
+void HtmlCodeGenerator::startCodeFragment(const QCString &style)
 {
-  *m_t << "<div class=\"fragment\">";
+    *m_t << "<div class=\"fragment " << style << "\">";
 }
 
 void HtmlCodeGenerator::endCodeFragment(const QCString &)
@@ -2638,9 +2639,17 @@ static void renderQuickLinksAsTree(TextStream &t,const QCString &relPath,LayoutN
       if (entry->visible() && quickLinkVisible(entry->kind()))
       {
         QCString url = entry->url();
-        t << "<li><a href=\"" << relPath << url << "\"><span>";
-        t << fixSpaces(entry->title());
-        t << "</span></a>\n";
+
+        if(entry->title() == "GitHub") {
+            t << "<li><span><a href=\"" << url << "\"><img src=\"$relpath^github-mark.svg\"/></a></span>\n";
+        }
+        else {
+            t << "<li><a href=\"" << relPath << url << "\"><span>";
+            t << fixSpaces(entry->title());
+            t << "</span></a>\n";
+        }
+
+
         // recursive into child list
         renderQuickLinksAsTree(t,relPath,entry.get());
         t << "</li>";
@@ -2681,7 +2690,9 @@ static void renderQuickLinksAsTabs(TextStream &t,const QCString &relPath,
                (entry->kind()==kind && !highlightParent)
               ),
               TRUE,relPath);
+
           t << fixSpaces(entry->title());
+
           endQuickIndexItem(t,url);
         }
       }

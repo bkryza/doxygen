@@ -154,6 +154,7 @@ enum CommandType
   CMD_ENDIVERBATIM = 124,
   CMD_IANCHOR      = 125,
   CMD_DOXYCONFIG   = 126,
+  CMD_EMBED        = 127
 };
 
 enum HtmlTagType
@@ -202,6 +203,7 @@ enum HtmlTagType
   HTML_THEAD     = 41,
   HTML_TBODY     = 42,
   HTML_TFOOT     = 43,
+  HTML_EMBED     = 44,
 
   XML_CmdMask    = 0x100,
 

@@ -535,6 +535,29 @@ void HtmlDocVisitor::operator()(const DocStyleChange &s)
 }
 
 ///--------------------------------------------------------------------------------------
+void HtmlDocVisitor::startCodeFragmentForLangExt(SrcLangExt ext) {
+    if(ext == SrcLangExt_Cpp) {
+        m_ci.startCodeFragment("language-cpp");
+    }
+    else if(ext == SrcLangExt_YAML) {
+        m_ci.startCodeFragment("language-yaml");
+    }
+    else if(ext == SrcLangExt_JSON) {
+        m_ci.startCodeFragment("language-json");
+    }
+    else if(ext == SrcLangExt_CMake) {
+        m_ci.startCodeFragment("language-cmake");
+    }
+    else if(ext == SrcLangExt_Shell) {
+        m_ci.startCodeFragment("language-shell");
+    }
+    else if(ext == SrcLangExt_Bash) {
+        m_ci.startCodeFragment("language-bash");
+    }
+    else {
+        m_ci.startCodeFragment("language-cpp");
+    }
+}
 
 void HtmlDocVisitor::operator()(const DocVerbatim &s)
 {
@@ -549,7 +572,9 @@ void HtmlDocVisitor::operator()(const DocVerbatim &s)
   {
     case DocVerbatim::Code:
       forceEndParagraph(s);
-      m_ci.startCodeFragment("DoxyCode");
+
+      startCodeFragmentForLangExt(langExt);
+
       getCodeParser(lang).parseCode(m_ci,
                                         s.context(),
                                         s.text(),
@@ -701,7 +726,7 @@ void HtmlDocVisitor::operator()(const DocInclude &inc)
   {
     case DocInclude::Include:
       forceEndParagraph(inc);
-      m_ci.startCodeFragment("DoxyCode");
+      startCodeFragmentForLangExt(langExt);
       getCodeParser(inc.extension()).parseCode(m_ci,
                                         inc.context(),
                                         inc.text(),
@@ -722,7 +747,7 @@ void HtmlDocVisitor::operator()(const DocInclude &inc)
     case DocInclude::IncWithLines:
       {
          forceEndParagraph(inc);
-         m_ci.startCodeFragment("DoxyCode");
+          startCodeFragmentForLangExt(langExt);
          FileInfo cfi( inc.file().str() );
          auto fd = createFileDef( cfi.dirPath(), cfi.fileName() );
          getCodeParser(inc.extension()).parseCode(m_ci,
@@ -769,7 +794,7 @@ void HtmlDocVisitor::operator()(const DocInclude &inc)
     case DocInclude::SnippetTrimLeft:
       {
          forceEndParagraph(inc);
-         m_ci.startCodeFragment("DoxyCode");
+          startCodeFragmentForLangExt(langExt);
          getCodeParser(inc.extension()).parseCode(m_ci,
                                            inc.context(),
                                            extractBlock(inc.text(),inc.blockId(),inc.type()==DocInclude::SnippetTrimLeft),
@@ -791,7 +816,7 @@ void HtmlDocVisitor::operator()(const DocInclude &inc)
     case DocInclude::SnipWithLines:
       {
          forceEndParagraph(inc);
-         m_ci.startCodeFragment("DoxyCode");
+          startCodeFragmentForLangExt(langExt);
          FileInfo cfi( inc.file().str() );
          auto fd = createFileDef( cfi.dirPath(), cfi.fileName() );
          getCodeParser(inc.extension()).parseCode(m_ci,
@@ -824,16 +849,18 @@ void HtmlDocVisitor::operator()(const DocIncOperator &op)
 {
   //printf("DocIncOperator: type=%d first=%d, last=%d text='%s'\n",
   //    op.type(),op.isFirst(),op.isLast(),qPrint(op.text()));
+    QCString locLangExt = getFileNameExtension(op.includeFileName());
+    if (locLangExt.isEmpty()) locLangExt = m_langExt;
+    SrcLangExt langExt = getLanguageFromFileName(locLangExt);
+
   if (op.isFirst())
   {
     forceEndParagraph(op);
-    if (!m_hide) m_ci.startCodeFragment("DoxyCode");
+    if (!m_hide) startCodeFragmentForLangExt(langExt);
     pushHidden(m_hide);
     m_hide=TRUE;
   }
-  QCString locLangExt = getFileNameExtension(op.includeFileName());
-  if (locLangExt.isEmpty()) locLangExt = m_langExt;
-  SrcLangExt langExt = getLanguageFromFileName(locLangExt);
+
   if (op.type()!=DocIncOperator::Skip)
   {
     m_hide = popHidden();
@@ -867,7 +894,7 @@ void HtmlDocVisitor::operator()(const DocIncOperator &op)
   if (op.isLast())
   {
     m_hide = popHidden();
-    if (!m_hide) m_ci.endCodeFragment("DoxyCode");
+    if (!m_hide) startCodeFragmentForLangExt(langExt);
     forceStartParagraph(op);
   }
   else
@@ -1699,7 +1726,7 @@ void HtmlDocVisitor::operator()(const DocImage &img)
     {
       HtmlAttrib opt;
       opt.name  = "style";
-      opt.value = "pointer-events: none;";
+//      opt.value = "pointer-events: none;";
       extraAttribs.push_back(opt);
     }
     QCString alt;
@@ -1714,6 +1741,13 @@ void HtmlDocVisitor::operator()(const DocImage &img)
     {
       src = correctURL(url,img.relPath());
     }
+      if (typeSVG)
+      {
+          m_t << "<embed type=\"image/svg+xml\" src=\"" << convertToHtml(src)
+              << "\"" << sizeAttribs << attrs;
+              m_t << ">" << alt << "</embed>\n";
+      }
+      else
     if (typeSVG && !inlineImage)
     {
       m_t << "<object type=\"image/svg+xml\" data=\"" << convertToHtml(src)

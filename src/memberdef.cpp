@@ -4116,12 +4116,17 @@ void MemberDefImpl::setAnchor()
     memAnchor+=" "+m_requiresClause;
   }
 
+
   // convert to md5 hash
   uint8_t md5_sig[16];
   char sigStr[33];
   MD5Buffer(memAnchor.data(),memAnchor.length(),md5_sig);
   MD5SigToString(md5_sig,sigStr);
   m_anc = QCString("a")+sigStr;
+
+  printf("#+#+#+# Calculating MD5 for anchor from %s -> %s\n",
+         memAnchor.str().c_str(), m_anc.str().c_str());
+
 }
 
 void MemberDefImpl::setGroupDef(const GroupDef *gd,Grouping::GroupPri_t pri,

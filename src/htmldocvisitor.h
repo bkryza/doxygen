@@ -19,6 +19,7 @@
 #include "docvisitor.h"
 #include "docnode.h"
 #include "qcstring.h"
+#include "types.h"
 
 class Definition;
 class MemberDef;
@@ -135,6 +136,8 @@ class HtmlDocVisitor : public DocVisitor
     void forceEndParagraph(const DocNode &n);
     template<class DocNode>
     void forceStartParagraph(const DocNode &n);
+
+    void startCodeFragmentForLangExt(SrcLangExt ext);
 
     //--------------------------------------
     // state variables

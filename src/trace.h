@@ -251,6 +251,12 @@ template<> struct fmt::formatter<SrcLangExt> : formatter<std::string>
       case SrcLangExt_SQL:      result="SQL";         break;
       case SrcLangExt_Slice:    result="Slice";       break;
       case SrcLangExt_Lex:      result="Lex";         break;
+      case SrcLangExt_YAML:      result="YAML";         break;
+      case SrcLangExt_JSON:      result="JSON";         break;
+      case SrcLangExt_CMake:      result="CMake";         break;
+      case SrcLangExt_Shell:      result="shell";         break;
+      case SrcLangExt_Bash:      result="bash";         break;
+
     }
     return formatter<std::string>::format(result, ctx);
   }

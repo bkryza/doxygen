@@ -1022,6 +1022,17 @@ void Markdown::writeMarkdownImage(const char *fmt, bool inline_img, bool explici
   AUTO_TRACE("fmt={} inline_img={} explicitTitle={} title={} content={} link={} attrs={}",
               fmt,inline_img,explicitTitle,Trace::trunc(title),Trace::trunc(content),link,attrs);
   QCString attributes = getFilteredImageAttributes(fmt, attrs);
+  if(fmt == "html" && link.endsWith(".svg")) {
+      m_out.addStr("@embed");
+      m_out.addStr(" ");
+      m_out.addStr(fmt);
+      m_out.addStr(" ");
+      m_out.addStr(link.mid(fd ? 0 : 5));
+      m_out.addStr(" ");
+      m_out.addStr("\\ilinebr ");
+      return;
+  }
+
   m_out.addStr("@image");
   if (inline_img)
   {

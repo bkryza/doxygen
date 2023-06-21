@@ -57,7 +57,12 @@ enum SrcLangExt
   SrcLangExt_Markdown = 0x10000,
   SrcLangExt_SQL      = 0x20000,
   SrcLangExt_Slice    = 0x40000,
-  SrcLangExt_Lex      = 0x80000
+  SrcLangExt_Lex      = 0x80000,
+  SrcLangExt_YAML      = 0x100000,
+  SrcLangExt_JSON      = 0x200000,
+  SrcLangExt_CMake      = 0x400000,
+  SrcLangExt_Shell      = 0x800000,
+  SrcLangExt_Bash      = 0x1000000
 };
 
 /** Grouping info */

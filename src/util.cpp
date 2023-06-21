@@ -5167,6 +5167,11 @@ g_lang2extMap[] =
   { "sql",         "sql",           SrcLangExt_SQL,      ".sql" },
   { "md",          "md",            SrcLangExt_Markdown, ".md"  },
   { "lex",         "lex",           SrcLangExt_Lex,      ".l"   },
+  { "yaml",         0,           SrcLangExt_YAML,      ".yml"   },
+  { "json",         0,           SrcLangExt_JSON,      ".json"   },
+  { "cmake",         0,           SrcLangExt_CMake,      ".cmake"   },
+  { "shell",         0,           SrcLangExt_Shell,      ".shell"   },
+  { "bash",         0,           SrcLangExt_Bash,      ".bash"   },
   { 0,             0,               static_cast<SrcLangExt>(0),0}
 };
 
@@ -5265,7 +5270,10 @@ void initDefaultExtensionMapping()
   updateLanguageMapping(".markdown", "md");
   updateLanguageMapping(".ice",      "slice");
   updateLanguageMapping(".l",        "lex");
-  updateLanguageMapping(".doxygen_lex_c", "c"); // this is a placeholder so we can map initializations
+    updateLanguageMapping(".yml",        "yaml");
+    updateLanguageMapping(".yaml",        "yaml");
+
+    updateLanguageMapping(".doxygen_lex_c", "c"); // this is a placeholder so we can map initializations
                                                 // in the lex scanning to cpp
 }
 

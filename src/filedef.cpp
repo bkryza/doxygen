@@ -1107,7 +1107,7 @@ void FileDefImpl::writeSourceBody(OutputList &ol,[[maybe_unused]] ClangTUParser 
     auto intf = Doxygen::parserManager->getCodeParser(getDefFileExtension());
     intf->resetCodeParserState();
     auto &codeOL = ol.codeGenerators();
-    codeOL.startCodeFragment("DoxyCode");
+    codeOL.startCodeFragment("language-cpp");
     bool needs2PassParsing =
         Doxygen::parseSourcesNeeded &&                // we need to parse (filtered) sources for cross-references
         !filterSourceFiles &&                         // but user wants to show sources as-is

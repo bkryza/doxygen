@@ -4416,6 +4416,9 @@ int DocPara::handleCommand(const QCString &cmdName, const int tok)
     case CMD_IMAGE:
       parser()->handleImage(thisVariant(),children());
       break;
+    case CMD_EMBED:
+      parser()->handleImage(thisVariant(),children());
+      break;
     case CMD_DOTFILE:
       if (!Config_getBool(HAVE_DOT))
       {
@@ -4706,6 +4709,11 @@ int DocPara::handleHtmlStartTag(const QCString &tagName,const HtmlAttribList &ta
         parser()->handleImg(thisVariant(),children(),tagHtmlAttribs);
       }
       break;
+//    case HTML_EMBED:
+//    {
+//      parser()->handleImg(thisVariant(),children(),tagHtmlAttribs);
+//    }
+//      break;
     case HTML_DETAILS:
       if (!parser()->context.token->emptyTag)
       {
